@@ -7,12 +7,18 @@
     android:orientation="vertical"
     android:padding="20dp" >
 
-    <ImageView
-        android:id="@+id/imageView1"
+    
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal|top"
-        android:src="@drawable/ic_launcher" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="GameBox"
+        android:fontFamily="sans-serif-light"
+        android:textSize="34sp"
+        android:textColor="#fff" />
+    
 
     <EditText
         android:layout_marginTop="10dp"
@@ -21,6 +27,7 @@
         android:layout_height="wrap_content"
         android:background="#fff"
         android:hint="@string/hint_login_email"
+        android:fontFamily="sans-serif-light"
         android:padding="5dp"
         android:textSize="22sp" >
 
@@ -34,6 +41,7 @@
         android:layout_marginTop="10dp"
         android:background="#fff"
         android:hint="@string/hint_login_password"
+        android:fontFamily="sans-serif-light"
         android:inputType="textPassword"
         android:padding="5dp"
         android:textSize="22sp" />
@@ -44,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/login"
+        android:fontFamily="sans-serif-light"
         android:textColor="#fff"
         android:textSize="22sp" />
 
@@ -53,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
+        android:fontFamily="sans-serif-light"
         android:text="or"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff" />
@@ -62,6 +72,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:fontFamily="sans-serif-light"
         android:text="@string/create_account"
         android:textColor="#fff"
         android:textSize="22sp" />

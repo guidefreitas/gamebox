@@ -21,6 +21,7 @@
     <string name="dialog_delete_game_title">Delete Game</string>
     <string name="dialog_title_pick_image_source">Image Source</string>
     <string name="dialog_delete_category_title">Delete Category</string>
+    <string name="empty_category_message">This category has no game.</string>
     
     <string name="delete">Delete</string>
     <string name="label_lent_to">Lent to</string>

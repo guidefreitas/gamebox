@@ -37,9 +37,12 @@
 
             <TextView
                 android:id="@+id/emptyMessage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="No Results" />
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:fontFamily="sans-serif-condensed"
+                style="?android:textAppearanceMedium"
+                android:text="@string/empty_category_message" />
         </LinearLayout>
     </LinearLayout>
 
