@@ -1,7 +1,5 @@
 package com.guidefreitas.gamebox;
 
-import java.util.List;
-
 import com.guidefreitas.gamebox.adapters.LentAdapter;
 import android.content.Intent;
 import android.os.Bundle;

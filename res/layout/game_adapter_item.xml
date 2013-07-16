@@ -11,8 +11,8 @@
  
 	<com.parse.ParseImageView 
 		android:id="@+id/coverImage" 
-		android:layout_width="104dp"
-		android:layout_height="182dp"
+		android:layout_width="142dp"
+		android:layout_height="215dp"
 		android:layout_marginRight="6dip"
 		android:maxHeight="50sp"
 		android:maxWidth="50sp"/>

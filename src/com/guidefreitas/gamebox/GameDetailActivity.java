@@ -1,21 +1,19 @@
 package com.guidefreitas.gamebox;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
-
-import com.parse.FindCallback;
+import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseQuery;
-
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -83,6 +81,29 @@ public class GameDetailActivity extends Activity {
 		Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		toast.show();
 	}
+	
+	private void confirmDeletion(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setMessage(R.string.dialog_delete_game_message)
+	       .setTitle(R.string.dialog_delete_game_title);
+		
+		// Add the buttons
+		builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		               DeleteGame();
+		           }
+		       });
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		               
+		           }
+		       });
+		// Create the AlertDialog
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,11 +121,24 @@ public class GameDetailActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit_game:
-			this.showEditGameActivity("teste");
+			this.showEditGameActivity(game.getObjectId());
+			return true;
+		case R.id.action_delete_game:
+			confirmDeletion();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void DeleteGame() {
+		game.deleteInBackground(new DeleteCallback() {
+			@Override
+			public void done(ParseException arg0) {
+				showErroMessage("Game deleted!");
+				onBackPressed();
+			}
+		});
 	}
 
 }

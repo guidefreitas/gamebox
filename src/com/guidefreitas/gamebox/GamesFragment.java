@@ -29,15 +29,23 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
         spinner.setVisibility(View.INVISIBLE);
         listView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
+        
+        final GamesFragment fragment = this;
         DataSources.getInstance(getActivity()).getCategories(new DataSourceGetObjectsCallback<Category>() {
 			@Override
 			public
 			void done(List<Category> objects, DataSourceGetDataException e) {
+				
 				spinner.setVisibility(View.VISIBLE);
                 listView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
 			}
 		});
+        
+        GamesAdapter adapter = (GamesAdapter) fragment.getListAdapter();
+		if(adapter != null){
+			adapter.loadObjects();
+		}
     }
     
     public void setListShown(boolean shown, boolean animate){
@@ -64,6 +72,12 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.INVISIBLE);
         }
+    }
+    
+    @Override
+    public void onResume(){
+    	super.onResume();
+    	updateData();
     }
     
     @Override

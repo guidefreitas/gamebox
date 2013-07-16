@@ -48,6 +48,17 @@ public class CategoriesAdapter extends BaseAdapter {
 		}
 	}
 	
+	public int getPositionById(String categoryId){
+		for(int i=0;i<categories.size();i++){
+			if(categories.get(i).getObjectId() != null && 
+					categories.get(i).getObjectId().equals(categoryId)){
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
 	public void addAllWithBlank(List<Category> categoriesList, String blankLabel){
 		Category category = new Category();
 		category.setName(blankLabel);

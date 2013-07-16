@@ -3,7 +3,6 @@ import android.content.Context;
 
 import com.guidefreitas.gamebox.callbacks.CreateCategoryCallback;
 import com.guidefreitas.gamebox.callbacks.CreateCategoryException;
-import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -77,6 +76,8 @@ public class GameBoxService {
 
     public void getAllCategories (com.parse.FindCallback<Category> callback){
         ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
+        query.include("category");
+        query.clearCachedResult();
         query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
         query.orderByAscending("name");
         query.findInBackground(callback);

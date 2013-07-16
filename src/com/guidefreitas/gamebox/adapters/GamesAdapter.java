@@ -21,7 +21,8 @@ public class GamesAdapter extends ParseQueryAdapter<ParseObject>{
 			public ParseQuery<ParseObject> create() {
 				ParseQuery<ParseObject> query = ParseQuery.getQuery("game");
 		        query.orderByAscending("name");
-		        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
+		        query.clearCachedResult();
+		        query.setCachePolicy(ParseQuery.CachePolicy.IGNORE_CACHE);
 		        if(categoryId != null && !categoryId.isEmpty()){
 		        	Category category = new Category();
 		        	category.setObjectId(categoryId);

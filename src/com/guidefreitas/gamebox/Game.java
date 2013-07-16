@@ -1,11 +1,7 @@
 package com.guidefreitas.gamebox;
 import java.util.Date;
 
-import com.guidefreitas.gamebox.callbacks.GetFileCallback;
-import com.guidefreitas.gamebox.callbacks.GetFileException;
-import com.parse.GetDataCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
@@ -33,7 +29,7 @@ public class Game  extends ParseObject {
 	}
 	
 	public String getCategoryId(){
-		return getString(FIELD_CATEGORY);
+		return getParseObject(FIELD_CATEGORY).getObjectId();
 	}
 	public void setCategory(Category category){
 		put(FIELD_CATEGORY, category);
@@ -97,7 +93,7 @@ public class Game  extends ParseObject {
     
     public void setCoverImage(byte[] image) throws Exception{
     	ParseFile file = new ParseFile("cover.jpg", image);
-		file.save();
+		//file.save();
 		put(FIELD_COVER_IMAGE, file);
     }
     
@@ -105,4 +101,5 @@ public class Game  extends ParseObject {
     	ParseFile imageCover = getParseFile(FIELD_COVER_IMAGE);
     	return imageCover;
     }
+    
 }

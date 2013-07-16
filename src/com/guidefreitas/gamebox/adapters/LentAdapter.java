@@ -1,30 +1,13 @@
 package com.guidefreitas.gamebox.adapters;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import com.guidefreitas.gamebox.Category;
-import com.guidefreitas.gamebox.Game;
 import com.guidefreitas.gamebox.R;
-import com.guidefreitas.gamebox.R.drawable;
-import com.guidefreitas.gamebox.R.id;
-import com.guidefreitas.gamebox.R.layout;
 import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class LentAdapter extends ParseQueryAdapter<ParseObject>{
