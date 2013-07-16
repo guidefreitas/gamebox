@@ -157,11 +157,16 @@ public class MainActivity  extends FragmentActivity implements
                 showNewCategoryDialog();
                 return true;
             case R.id.action_remove_category:
-                //remove category
+                showRemoveCategoryDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    
+    private void showRemoveCategoryDialog(){
+    	RemoveCategoryDialog dialog = new RemoveCategoryDialog();
+    	dialog.show(getSupportFragmentManager(), RemoveCategoryDialog.class.toString());
     }
     
     private void NavigateToLogin(){

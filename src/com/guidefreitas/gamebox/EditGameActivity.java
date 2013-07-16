@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +55,6 @@ public class EditGameActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_game);
-		
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -67,6 +67,10 @@ public class EditGameActivity extends FragmentActivity implements
 		etLentPersonName = (EditText) findViewById(R.id.etLentPersonName);
 		spGameCategory = (Spinner) findViewById(R.id.spGameCategory);
 		cbLent = (CheckBox) findViewById(R.id.cbLent);
+
+		Drawable empty_cover = this.getResources().getDrawable(
+				R.drawable.blank_box);
+		coverImageView.setPlaceholder(empty_cover);
 
 		spGameCategory
 				.setAdapter(DataSources.getInstance(this).categoryAdapter);
@@ -138,8 +142,8 @@ public class EditGameActivity extends FragmentActivity implements
 
 	private void showCameraIntent() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    // start the image capture Intent
-	    startActivityForResult(intent, SELECT_CAMERA_PHOTO);
+		// start the image capture Intent
+		startActivityForResult(intent, SELECT_CAMERA_PHOTO);
 	}
 
 	private void showGaleryIntent() {
@@ -166,7 +170,18 @@ public class EditGameActivity extends FragmentActivity implements
 					showMessage(ex.getMessage());
 				}
 			}
+			break;
+			
+		case SELECT_CAMERA_PHOTO:
+			if(resultCode == RESULT_OK){
+				Bundle extras = imageReturnedIntent.getExtras();
+			    Bitmap coverImage = (Bitmap) extras.get("data");
+			    setCoverImage(coverImage);
+			}
+			break;
+			
 		}
+
 	}
 
 	private void setCoverImage(Bitmap coverImage) {
