@@ -24,8 +24,10 @@ public final class R {
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f060000;
-        public static final int activity_vertical_margin=0x7f060001;
+        public static final int activity_horizontal_margin=0x7f060002;
+        public static final int activity_vertical_margin=0x7f060003;
+        public static final int games_list_cover_image_height=0x7f060001;
+        public static final int games_list_cover_image_width=0x7f060000;
     }
     public static final class drawable {
         public static final int blank_box=0x7f020000;

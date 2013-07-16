@@ -9,8 +9,10 @@ import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,6 +37,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressLint("NewApi")
 public class EditGameActivity extends FragmentActivity implements
 		DatePickerFragment.OnDateSetListener {
 	private static final int SELECT_PHOTO = 100;
@@ -55,9 +58,11 @@ public class EditGameActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_game);
-
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 
 		scrollView = (ScrollView) findViewById(R.id.scrollView);
 		coverImageView = (ParseImageView) findViewById(R.id.coverImage);

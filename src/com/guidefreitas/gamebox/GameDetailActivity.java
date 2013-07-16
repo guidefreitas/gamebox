@@ -1,12 +1,17 @@
 package com.guidefreitas.gamebox;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseQuery;
+
+import android.os.Build;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressLint("NewApi")
 public class GameDetailActivity extends Activity {
 
 	private ProgressBar progressBar = null;
@@ -34,6 +40,11 @@ public class GameDetailActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_detail);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 
 		this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
 		this.detailPanel = (LinearLayout) this.findViewById(R.id.detailPanel);
@@ -45,35 +56,41 @@ public class GameDetailActivity extends Activity {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			String gameId = extras.getString("GAME_ID");
-			if (gameId != null && !gameId.isEmpty()) {
-				ParseQuery<Game> query = ParseQuery.getQuery(Game.class);
-				query.whereEqualTo(Game.FIELD_OBJECT_ID, gameId);
-				query.getFirstInBackground(new GetCallback<Game>() {
-
-					@Override
-					public void done(Game gameDb, ParseException e) {
-						if (e == null) {
-							game = gameDb;
-							tvGameName.setText(game.getName());
-							tvGamePrice.setText(game.getBuyValue().toString());
-							SimpleDateFormat dt1 = new SimpleDateFormat(
-									"dd/MM/yyyy");
-							tvGameBuyDate.setText(dt1.format(game.getBuyDate()));
-							ivCoverImage.setPlaceholder(getResources()
-									.getDrawable(R.drawable.blank_box));
-							ivCoverImage.setParseFile(game.getCoverImage());
-							ivCoverImage.loadInBackground();
-							progressBar.setVisibility(View.GONE);
-							detailPanel.setVisibility(View.VISIBLE);
-						} else {
-							showErroMessage(e.getMessage());
-						}
-					}
-				});
-
-			}
+			initGameScreen(gameId);
 		} else {
 			showErroMessage("Game Id not informed");
+		}
+	}
+	
+	private void initGameScreen(String gameId){
+		if (gameId != null && !gameId.isEmpty()) {
+			ParseQuery<Game> query = ParseQuery.getQuery(Game.class);
+			query.whereEqualTo(Game.FIELD_OBJECT_ID, gameId);
+			query.getFirstInBackground(new GetCallback<Game>() {
+
+				@Override
+				public void done(Game gameDb, ParseException e) {
+					if (e == null) {
+						game = gameDb;
+						tvGameName.setText(game.getName());
+						NumberFormat baseFormat = NumberFormat.getCurrencyInstance();
+						String priceString = baseFormat.format(game.getBuyValue());
+						tvGamePrice.setText(priceString);
+						SimpleDateFormat dt1 = new SimpleDateFormat(
+								"dd/MM/yyyy");
+						tvGameBuyDate.setText(dt1.format(game.getBuyDate()));
+						ivCoverImage.setPlaceholder(getResources()
+								.getDrawable(R.drawable.blank_box));
+						ivCoverImage.setParseFile(game.getCoverImage());
+						ivCoverImage.loadInBackground();
+						progressBar.setVisibility(View.GONE);
+						detailPanel.setVisibility(View.VISIBLE);
+					} else {
+						showErroMessage(e.getMessage());
+					}
+				}
+			});
+
 		}
 	}
 
