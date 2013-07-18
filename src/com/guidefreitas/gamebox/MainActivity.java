@@ -57,18 +57,29 @@ public class MainActivity  extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        GameBoxService.InitializeParse(this);
+        
         this.initialiseTabHost(savedInstanceState);
         if (savedInstanceState != null) {
             // Define a Tab de acordo com o estado salvo
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
+        
+        this.verifyNetworkConnection();
+        
         // Inicializa o ViewPager
         this.initializeViewPager();
 
 
         ParseAnalytics.trackAppOpened(getIntent());
 
+    }
+    
+    public void verifyNetworkConnection(){
+    	if(!Util.isOnline(this)){
+    		Toast toast = Toast.makeText(this, "This app needs internet connection", Toast.LENGTH_LONG);
+    		toast.show();
+    	}
     }
     
     @Override
@@ -114,7 +125,6 @@ public class MainActivity  extends FragmentActivity implements
 
     private static void AddTab(MainActivity activity, TabHost tabHost,
                                TabHost.TabSpec tabSpec, TabInfo tabInfo) {
-        // Attach uma Tab view factory para o spec
         tabSpec.setContent(activity.new TabFactory(activity));
         tabHost.addTab(tabSpec);
     }
@@ -147,9 +157,7 @@ public class MainActivity  extends FragmentActivity implements
         		return true;
             case R.id.action_logout:
             	Logout();
-            	Toast toast = Toast.makeText(this, "Logout", Toast.LENGTH_LONG);
-            	toast.show();
-                return true;
+            	return true;
             case R.id.action_add_game:
             	showNewGameActivity();
                 return true;
@@ -177,13 +185,15 @@ public class MainActivity  extends FragmentActivity implements
     
     private void Logout() {
 		AuthManager.getInstance(this).logout();
+		Toast toast = Toast.makeText(this, "Logout", Toast.LENGTH_LONG);
+    	toast.show();
 		NavigateToLogin();
 	}
 
 	public void updateData(){
     	 GamesFragment gamesFragment = (GamesFragment) ((ViewPagerAdapter) mPagerAdapter).getItem(0);
     	 LentFragment lentFragment = (LentFragment) ((ViewPagerAdapter) mPagerAdapter).getItem(1);
-         gamesFragment.updateData();
+         gamesFragment.updateData(true);
          lentFragment.updateData();
     }
     

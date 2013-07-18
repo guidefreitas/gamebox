@@ -48,4 +48,8 @@
     <string name="title_activity_login">Login</string>
 	<string name="title_activity_edit_game">Game</string>
 	<string name="title_activity_signup">Sign Up</string>
+	
+	<string name="dialog_cover_image_camera">Camera</string>
+	<string name="dialog_cover_image_galery">Image Galery</string>
+	<string name="dialog_cover_image_search">Search Cover Image in Google</string>
 </resources>

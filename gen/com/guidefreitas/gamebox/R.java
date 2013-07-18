@@ -34,9 +34,10 @@ public final class R {
         public static final int ic_calendar=0x7f020001;
         public static final int ic_edit=0x7f020002;
         public static final int ic_launcher=0x7f020003;
-        public static final int ic_refresh=0x7f020004;
-        public static final int ic_save=0x7f020005;
-        public static final int ic_trash=0x7f020006;
+        public static final int ic_new=0x7f020004;
+        public static final int ic_refresh=0x7f020005;
+        public static final int ic_save=0x7f020006;
+        public static final int ic_trash=0x7f020007;
     }
     public static final class id {
         public static final int action_add_category=0x7f0a0022;
@@ -48,32 +49,32 @@ public final class R {
         public static final int action_remove_category=0x7f0a0023;
         public static final int action_save_game=0x7f0a001c;
         public static final int btCreateAccount=0x7f0a0015;
-        public static final int btLogin=0x7f0a0014;
+        public static final int btLogin=0x7f0a0013;
         public static final int cbLent=0x7f0a0006;
         public static final int coverImage=0x7f0a0001;
         public static final int detailPanel=0x7f0a0009;
-        public static final int emptyMessage=0x7f0a000f;
+        public static final int emptyMessage=0x7f0a000e;
         public static final int etConfirmPassword=0x7f0a0018;
-        public static final int etEmail=0x7f0a0012;
+        public static final int etEmail=0x7f0a0011;
         public static final int etGameBuyDate=0x7f0a0005;
         public static final int etGameName=0x7f0a0002;
         public static final int etGamePrice=0x7f0a0004;
         public static final int etLentPersonName=0x7f0a0007;
-        public static final int etPassword=0x7f0a0013;
+        public static final int etPassword=0x7f0a0012;
         public static final int gameBuyDate=0x7f0a000b;
         public static final int gameName=0x7f0a000a;
         public static final int gamePrice=0x7f0a000c;
         public static final int imageView1=0x7f0a0017;
-        public static final int itensList=0x7f0a000e;
-        public static final int linearLayout=0x7f0a0010;
+        public static final int linearLayout=0x7f0a000f;
         public static final int linearLayoutItem=0x7f0a001a;
         public static final int progressBar=0x7f0a0008;
         public static final int scrollView=0x7f0a0000;
         public static final int spGameCategory=0x7f0a0003;
         public static final int spinner=0x7f0a000d;
         public static final int subtitle=0x7f0a001b;
-        public static final int textView1=0x7f0a0011;
+        public static final int textView1=0x7f0a0010;
         public static final int title=0x7f0a0019;
+        public static final int tvOr=0x7f0a0014;
         public static final int viewpager=0x7f0a0016;
     }
     public static final class layout {
@@ -108,6 +109,9 @@ public final class R {
         public static final int create_account=0x7f07001a;
         public static final int delete=0x7f070015;
         public static final int description_game_cover_image=0x7f07000f;
+        public static final int dialog_cover_image_camera=0x7f07002d;
+        public static final int dialog_cover_image_galery=0x7f07002e;
+        public static final int dialog_cover_image_search=0x7f07002f;
         public static final int dialog_delete_category_title=0x7f070013;
         public static final int dialog_delete_game_message=0x7f070010;
         public static final int dialog_delete_game_title=0x7f070011;

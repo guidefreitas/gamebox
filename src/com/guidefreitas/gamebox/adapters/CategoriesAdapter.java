@@ -1,57 +1,46 @@
 package com.guidefreitas.gamebox.adapters;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.guidefreitas.gamebox.Category;
 import com.guidefreitas.gamebox.R;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 
-public class CategoriesAdapter extends BaseAdapter {
-	
-	private List<Category> categories;
-	private LayoutInflater mInflater;
-	private ViewHolder holder;
-	
+public class CategoriesAdapter extends ParseQueryAdapter<Category> {
+
+	private Context context;
+
 	static class ViewHolder{
 		private TextView tvTitle;
 	}
 	
-	public CategoriesAdapter(Context context){
-		mInflater = LayoutInflater.from(context);
-		this.categories = new ArrayList<Category>();
+	public CategoriesAdapter(Context context, final boolean forceRefresh){
+		super(context, new QueryFactory<Category>() {
+			@Override
+			public ParseQuery<Category> create() {
+				ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
+		        query.orderByAscending("name");
+		        if(forceRefresh){
+		        	query.clearCachedResult();
+		        }
+		        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+		        return query;
+			}
+		});
+		this.setTextKey("name");
+		this.context = context;
+
 	}
 	
-	public CategoriesAdapter(Context context, List<Category> categoriesList) {
-		mInflater = LayoutInflater.from(context);
-		this.categories = categoriesList;
-	}
-	
-	@Override
-	public int getCount() {
-		if(categories != null){
-			return categories.size();
-		}
-		
-		return 0;
-	}
-	
-	public void clear(){
-		if(categories != null){
-			this.categories.clear();
-			notifyDataSetChanged();
-		}
-	}
-	
-	public int getPositionById(String categoryId){
-		for(int i=0;i<categories.size();i++){
-			if(categories.get(i).getObjectId() != null && 
-					categories.get(i).getObjectId().equals(categoryId)){
+	public int indexOf(Category category){
+		for(int i=0;i<getCount();i++){
+			Category catDb = getItem(i);
+			if(catDb.getObjectId().equals(category.getObjectId())){
 				return i;
 			}
 		}
@@ -59,62 +48,39 @@ public class CategoriesAdapter extends BaseAdapter {
 		return -1;
 	}
 	
-	public void addAllWithBlank(List<Category> categoriesList, String blankLabel){
-		Category category = new Category();
-		category.setName(blankLabel);
-		this.categories.add(0, category);
-		this.categories.addAll(categoriesList);
-		notifyDataSetChanged();
-	}
 	
-	public void addAll(List<Category> categoriesList){
-		this.categories.addAll(categoriesList);
-		notifyDataSetChanged();
-	}
-
 	@Override
-	public Object getItem(int index) {
-		return categories.get(index);
-	}
-
-	@Override
-	public long getItemId(int index) {
-		return index;
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup viewGroup) {
+	public View getItemView(Category object, View convertView, ViewGroup viewGroup){
+		ViewHolder holder;
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.categories_spinner_layout, null);
+			convertView = View.inflate(context, R.layout.categories_spinner_layout, null);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
-		Category category = categories.get(position);
-		holder.tvTitle.setText(category.getName());
 
+		holder.tvTitle.setText(object.getString("name"));
 		return convertView;
 	}
 	
 	@Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.categories_spinner_layout, null);
+			convertView = View.inflate(context, R.layout.categories_spinner_layout, null);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
-		Category category = categories.get(position);
-		holder.tvTitle.setText(category.getName());
+		ParseObject object = this.getItem(position);
+		holder.tvTitle.setText(object.getString("name"));
 
 		return convertView;
     }
-
+	
 }
 

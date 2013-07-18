@@ -1,54 +1,29 @@
 package com.guidefreitas.gamebox;
 
-import java.util.List;
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import com.guidefreitas.gamebox.adapters.CategoriesAdapter;
 import com.guidefreitas.gamebox.adapters.GamesAdapter;
 import com.guidefreitas.gamebox.adapters.LentAdapter;
-import com.guidefreitas.gamebox.callbacks.DataSourceGetObjectsCallback;
-import com.parse.FindCallback;
-import com.parse.ParseException;
+
 
 public class DataSources {
-	
-	private Activity activity;
-	private GameBoxService gbApi = null;
-	public CategoriesAdapter categoryAdapter = null;
-	
-	private static DataSources instance;
-	private DataSources(Activity activity){
-		this.activity = activity;
-		gbApi = new GameBoxService(activity);
-		categoryAdapter = new CategoriesAdapter(activity);
+
+	//private static DataSources instance;
+	private DataSources(){
 
 	}
-	public static DataSources getInstance(Activity activity){
+	/*
+	public static DataSources getInstance(){
 		if(instance == null)
-			instance = new DataSources(activity);
+			instance = new DataSources();
 		
 		return instance;
 	}
+	*/
 	
-	
-	public void getCategories(final DataSourceGetObjectsCallback<Category> callback){
-		
-		gbApi.getAllCategories(new FindCallback<Category>() {
-			@Override
-			public void done(List<Category> categoriesList, ParseException e) {
-                if (e == null) {
-                    categoryAdapter.clear();
-                    String emptyCategoryLabel =  activity.getResources().getString(R.string.hint_category);
-                    categoryAdapter.addAllWithBlank(categoriesList, emptyCategoryLabel);
-                    callback.done(categoriesList, null);
-                } else {
-                	Log.e("score", "Error: " + e.getMessage());
-                	DataSourceGetDataException ex = new DataSourceGetDataException(e.getMessage());
-                	callback.done(null, ex);
-                }
-            }
-        });
+	public static CategoriesAdapter getCategoriesAdapter(Context context, boolean forceRefresh){
+		CategoriesAdapter adapter = new  CategoriesAdapter(context, forceRefresh);
+		return adapter;
 	}
 	
 	public static LentAdapter getLentAdapter(Context context){
@@ -56,8 +31,8 @@ public class DataSources {
 		return adapter;
 	}
 
-	public static GamesAdapter getGamesAdapter(Context context, String categoryId){
-		GamesAdapter adapter = new GamesAdapter(context, categoryId);
+	public static GamesAdapter getGamesAdapter(Context context, String categoryId, boolean forceRefresh){
+		GamesAdapter adapter = new GamesAdapter(context, categoryId, forceRefresh);
 		return adapter;
 	}
 	

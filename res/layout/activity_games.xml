@@ -11,39 +11,25 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left|center_vertical" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical" />
+        android:layout_height="fill_parent" />
 
     <LinearLayout
-        android:id="@+id/itensList"
+        android:id="@android:id/empty"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <ListView
-            android:id="@android:id/list"
+        <TextView
+            android:id="@+id/emptyMessage"
+            style="?android:textAppearanceMedium"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-
-        <LinearLayout
-            android:id="@android:id/empty"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/emptyMessage"
-                android:gravity="center_vertical|center_horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:fontFamily="sans-serif-condensed"
-                style="?android:textAppearanceMedium"
-                android:text="@string/empty_category_message" />
-        </LinearLayout>
+            android:layout_height="fill_parent"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/empty_category_message" />
     </LinearLayout>
 
 </LinearLayout>

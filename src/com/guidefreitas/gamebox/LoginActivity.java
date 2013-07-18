@@ -4,6 +4,7 @@ import com.guidefreitas.gamebox.callbacks.LoginCallback;
 import com.guidefreitas.gamebox.callbacks.LoginException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -71,8 +72,13 @@ public class LoginActivity extends Activity{
 	 private void Login(){
 		 String email = etEmail.getText().toString();
 		 String password = etPassword.getText().toString();
-		 btLogin.setEnabled(false);
-		 btLogin.setText(R.string.loading);
+		 
+		 final ProgressDialog progress = new ProgressDialog(this);
+		 String loading = this.getResources().getString(R.string.loading);
+		 progress.setCanceledOnTouchOutside(false);
+		 progress.setMessage(loading);
+		 progress.show();
+		 
 		 AuthManager.getInstance(this).login(email, password, new LoginCallback() {
 			@Override
 			public void done(String email, LoginException e) {
@@ -82,8 +88,7 @@ public class LoginActivity extends Activity{
 					showErrorMessage(e.getMessage());
 				}
 				
-				btLogin.setText(R.string.login);
-				btLogin.setEnabled(true);
+				progress.dismiss();
 			}
 		 });
 	 }

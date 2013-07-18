@@ -7,11 +7,8 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseQuery;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -40,11 +37,6 @@ public class GameDetailActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_detail);
-		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			ActionBar actionBar = getActionBar();
-			actionBar.setDisplayHomeAsUpEnabled(true);
-		}
 
 		this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
 		this.detailPanel = (LinearLayout) this.findViewById(R.id.detailPanel);
@@ -64,8 +56,10 @@ public class GameDetailActivity extends Activity {
 	
 	private void initGameScreen(String gameId){
 		if (gameId != null && !gameId.isEmpty()) {
+			
 			ParseQuery<Game> query = ParseQuery.getQuery(Game.class);
 			query.whereEqualTo(Game.FIELD_OBJECT_ID, gameId);
+			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
 			query.getFirstInBackground(new GetCallback<Game>() {
 
 				@Override
@@ -138,6 +132,7 @@ public class GameDetailActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit_game:
+			
 			this.showEditGameActivity(game.getObjectId());
 			return true;
 		case R.id.action_delete_game:

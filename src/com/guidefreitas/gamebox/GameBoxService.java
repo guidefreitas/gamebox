@@ -17,12 +17,11 @@ import java.util.List;
  */
 public class GameBoxService {
 
-    public GameBoxService(Context context){
-        ParseObject.registerSubclass(Category.class);
+    
+    public static void InitializeParse(Context context){
+    	ParseObject.registerSubclass(Category.class);
         ParseObject.registerSubclass(Game.class);
         Parse.initialize(context, ParseManager.applicationId, ParseManager.clientId);
-        
-        //Politica de seguranca onde somente o usuario dono pode ver e modificar os objetos
         ParseACL.setDefaultACL(new ParseACL(), true);
     }
 
@@ -57,28 +56,13 @@ public class GameBoxService {
 			}
 		});
     }
-    
-    public void CreateGame(Game game){
-    	ParseObject gameParse = ParseObject.create("game");
-    	gameParse.put("name", game.getName());
-    	gameParse.saveInBackground();
-    }
-
-    public void DeleteCategory(Category category){
-
-    }
-    
-
-    public Category getCategoryByName(String categoryName){
-        return new Category();
-    }
    
 
     public void getAllCategories (com.parse.FindCallback<Category> callback){
         ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
         query.include("category");
         query.clearCachedResult();
-        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
         query.orderByAscending("name");
         query.findInBackground(callback);
     }

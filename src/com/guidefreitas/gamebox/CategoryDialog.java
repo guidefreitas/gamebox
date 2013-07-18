@@ -68,7 +68,7 @@ public class CategoryDialog extends DialogFragment {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
 						// Salva os dados
-						GameBoxService gbApi = new GameBoxService(getActivity());
+						GameBoxService gbApi = new GameBoxService();
 						String categoryName = input.getText().toString();
 						Log.v("Category: ", categoryName);
 						Category category = new Category();

@@ -4,5 +4,6 @@
         android:icon="@drawable/ic_save"
         android:orderInCategory="100"
         android:showAsAction="always|withText"
-        android:title="@string/action_save_game"/>
+        android:title="@string/action_save_game"
+        android:titleCondensed="@string/action_save_game"/>
 </menu>

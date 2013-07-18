@@ -1,22 +1,16 @@
 package com.guidefreitas.gamebox;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.guidefreitas.gamebox.adapters.CategoriesAdapter;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
 public class RemoveCategoryDialog extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-	    final List<Category> selectedCategories = new ArrayList<Category>(); 
-	    final CategoriesAdapter adapter = DataSources.getInstance(getActivity()).categoryAdapter;
+	    final CategoriesAdapter adapter = DataSources.getCategoriesAdapter(getActivity(), false);
 	     
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	    // Set the dialog title

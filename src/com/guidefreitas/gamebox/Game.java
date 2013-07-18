@@ -1,6 +1,6 @@
 package com.guidefreitas.gamebox;
-import java.util.Date;
 
+import java.util.Date;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -9,8 +9,9 @@ import com.parse.ParseObject;
  * Created by guilherme on 7/11/13.
  */
 @ParseClassName("game")
-public class Game  extends ParseObject {
-	
+public class Game  extends ParseObject{
+
+
 	final static String FIELD_OBJECT_ID="objectId";
 	final static String FIELD_NAME = "name";
 	final static String FIELD_BUY_DATE = "buy_date";

@@ -3,6 +3,8 @@ package com.guidefreitas.gamebox;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+
+import com.guidefreitas.gamebox.adapters.CategoriesAdapter;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
@@ -15,6 +17,7 @@ import android.provider.MediaStore;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -77,8 +80,8 @@ public class EditGameActivity extends FragmentActivity implements
 				R.drawable.blank_box);
 		coverImageView.setPlaceholder(empty_cover);
 
-		spGameCategory
-				.setAdapter(DataSources.getInstance(this).categoryAdapter);
+		CategoriesAdapter categoriesAdapter = DataSources.getCategoriesAdapter(this, false);
+		spGameCategory.setAdapter(categoriesAdapter);
 		spGameCategory.setPrompt("Category");
 
 		Bundle extras = getIntent().getExtras();
@@ -223,13 +226,23 @@ public class EditGameActivity extends FragmentActivity implements
 	}
 
 	private void initGameScreen(String gameId) {
+		
+		final ProgressDialog progressDialog = new ProgressDialog(this);
+		String loading = this.getResources().getString(R.string.loading);
+		progressDialog.setMessage(loading);
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.show();
+		
 		if (gameId != null && !gameId.isEmpty()) {
 			ParseQuery<Game> query = ParseQuery.getQuery(Game.class);
 			query.whereEqualTo(Game.FIELD_OBJECT_ID, gameId);
+			query.include(Game.FIELD_CATEGORY);
+			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
 			query.getFirstInBackground(new GetCallback<Game>() {
 
 				@Override
 				public void done(Game gameDb, ParseException e) {
+					progressDialog.dismiss();
 					if (e == null) {
 						game = gameDb;
 						etGameName.setText(game.getName());
@@ -242,14 +255,14 @@ public class EditGameActivity extends FragmentActivity implements
 						coverImageView.setParseFile(game.getCoverImage());
 						coverImageView.loadInBackground();
 
-						String categoryId = game.getCategoryId();
-						int pos = DataSources.getInstance(getParent()).categoryAdapter
-								.getPositionById(categoryId);
-						if (pos != -1) {
-
+						Category category = (Category) game.getParseObject(Game.FIELD_CATEGORY);
+						CategoriesAdapter adapter = (CategoriesAdapter) spGameCategory.getAdapter();
+						int position = adapter.indexOf(category);
+						if(category != null){
 							spGameCategory.setSelected(true);
-							spGameCategory.setSelection(pos);
+							spGameCategory.setSelection(position);
 						}
+						
 
 						if (game.isLent()) {
 							cbLent.setChecked(true);
@@ -262,6 +275,7 @@ public class EditGameActivity extends FragmentActivity implements
 			});
 
 		}
+		
 
 	}
 
@@ -297,9 +311,15 @@ public class EditGameActivity extends FragmentActivity implements
 			game.setLent(false);
 			game.setFriendLent("");
 		}
+		
+		final ProgressDialog progress = new ProgressDialog(this);
+		progress.setMessage("Saving...");
+		progress.setCanceledOnTouchOutside(false);
+		progress.show();
 		game.saveInBackground(new SaveCallback() {
 			@Override
 			public void done(ParseException arg0) {
+				progress.dismiss();
 				showMessage("Game Saved!");
 				navigateToHome();
 			}

@@ -1,93 +1,38 @@
 package com.guidefreitas.gamebox;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import java.util.List;
-
+import com.guidefreitas.gamebox.adapters.CategoriesAdapter;
 import com.guidefreitas.gamebox.adapters.GamesAdapter;
-import com.guidefreitas.gamebox.callbacks.DataSourceGetObjectsCallback;
 
 public class GamesFragment extends ListFragment implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinner;
-    private LinearLayout listView;
-    protected ProgressBar progressBar;
     boolean mListShown;
 
-    public void updateData(){
+    public void updateData(boolean forceRefresh){
 
-        spinner.setVisibility(View.INVISIBLE);
-        listView.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
-        
-        final GamesFragment fragment = this;
-        DataSources.getInstance(getActivity()).getCategories(new DataSourceGetObjectsCallback<Category>() {
-			@Override
-			public
-			void done(List<Category> objects, DataSourceGetDataException e) {
-				
-				spinner.setVisibility(View.VISIBLE);
-                listView.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-			}
-		});
-        
-        GamesAdapter adapter = (GamesAdapter) fragment.getListAdapter();
+    	CategoriesAdapter categoriesAdapter = DataSources.getCategoriesAdapter(getActivity(), true);
+    	spinner.setAdapter(categoriesAdapter);
+        GamesAdapter adapter = (GamesAdapter) this.getListAdapter();
 		if(adapter != null){
 			adapter.loadObjects();
 		}
     }
     
-    public void setListShown(boolean shown, boolean animate){
-        if (mListShown == shown) {
-            return;
-        }
-        mListShown = shown;
-        if (shown) {
-            if (animate) {
-            	progressBar.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_out));
-            	listView.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_in));
-            }
-            progressBar.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
-        } else {
-            if (animate) {
-            	progressBar.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_in));
-            	listView.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_out));
-            }
-            progressBar.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.INVISIBLE);
-        }
-    }
-    
     @Override
     public void onResume(){
     	super.onResume();
-    	updateData();
-    }
-    
-    @Override
-    public void setListShown(boolean shown){
-        setListShown(shown, true);
-    }
-    
-    @Override
-    public void setListShownNoAnimation(boolean shown) {
-        setListShown(shown, false);
+    	//updateData();
     }
    
     
@@ -100,17 +45,18 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
         }
         View view = inflater.inflate(R.layout.activity_games, container, false);
         this.spinner = (Spinner) view.findViewById(R.id.spinner);
-        this.listView = (LinearLayout) view.findViewById(R.id.itensList);
-        this.progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-        spinner.setAdapter(DataSources.getInstance(getActivity()).categoryAdapter);
+        CategoriesAdapter categoriesAdapter = DataSources.getCategoriesAdapter(getActivity(), false);
+        spinner.setAdapter(categoriesAdapter);
+        Drawable tst = getActivity().getResources().getDrawable(R.drawable.ic_trash);
+        categoriesAdapter.setPlaceholder(tst);
         spinner.setPrompt("All Categories");
         spinner.setOnItemSelectedListener(this);
         
-        
-        updateData();
+        updateData(false);
         return view;
     }
+    
+    
     
     public void showGameActivity(String gameId){
     	Intent intent = new Intent(getActivity(), GameDetailActivity.class);
@@ -120,13 +66,15 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    	
     	if(i > 0){
-    		Category category = (Category) DataSources.getInstance(getActivity()).categoryAdapter.getItem(i);
-    		GamesAdapter adapter = DataSources.getGamesAdapter(getActivity(), category.getObjectId());
+    		CategoriesAdapter categoriesAdapter = (CategoriesAdapter) spinner.getAdapter();
+    		Category category = categoriesAdapter.getItem(i);
+    		GamesAdapter adapter = DataSources.getGamesAdapter(getActivity(), category.getObjectId(), false);
     		this.setListAdapter(adapter);
     		
     	}else{
-    		GamesAdapter adapter = DataSources.getGamesAdapter(getActivity(), null);
+    		GamesAdapter adapter = DataSources.getGamesAdapter(getActivity(), null, false);
     		this.setListAdapter(adapter);
     	}
     	
@@ -135,7 +83,6 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
     @Override
     public void onListItemClick (ListView l, View v, int position, long id){
     	Game selectedGame = (Game) this.getListAdapter().getItem(position);
-    	
     	String gameId = selectedGame.getObjectId();
     	showGameActivity(gameId);
     }

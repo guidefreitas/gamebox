@@ -1,8 +1,8 @@
 package com.guidefreitas.gamebox.adapters;
 
+import com.guidefreitas.gamebox.Game;
 import com.guidefreitas.gamebox.R;
 import com.parse.ParseImageView;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import android.content.Context;
@@ -10,15 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class LentAdapter extends ParseQueryAdapter<ParseObject>{
+public class LentAdapter extends ParseQueryAdapter<Game>{
 	
 	private Context context;
 	
 	public LentAdapter(Context context){
-		super(context, new QueryFactory<ParseObject>() {
+		super(context, new QueryFactory<Game>() {
 			@Override
-			public ParseQuery<ParseObject> create() {
-				ParseQuery<ParseObject> query = ParseQuery.getQuery("game");
+			public ParseQuery<Game> create() {
+				ParseQuery<Game> query = ParseQuery.getQuery(Game.class);
 		        query.orderByAscending("name");
 		        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
 		        query.whereEqualTo("lent", true);
@@ -30,7 +30,7 @@ public class LentAdapter extends ParseQueryAdapter<ParseObject>{
 	}
 	
 	@Override
-	public View getItemView(ParseObject object, View v, ViewGroup parent){
+	public View getItemView(Game object, View v, ViewGroup parent){
 
 	  if (v == null) {
 	    v = View.inflate(context, R.layout.game_adapter_item, null);

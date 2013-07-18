@@ -7,7 +7,6 @@ import com.guidefreitas.gamebox.callbacks.CreateUserException;
 import com.guidefreitas.gamebox.callbacks.LoginCallback;
 import com.guidefreitas.gamebox.callbacks.LoginException;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -16,19 +15,16 @@ import com.parse.SignUpCallback;
  * Created by guilherme on 7/11/13.
  */
 public class AuthManager {
-	private Context context;
     private ParseUser parseUser;
-
     private static AuthManager instance;
 
-    private AuthManager(Context context){
-    	this.context = context;
-    	Parse.initialize(context, ParseManager.applicationId, ParseManager.clientId);
+    private AuthManager(){
+    	
     }
 
     public static AuthManager getInstance(Context context){
         if(instance == null){
-            instance = new AuthManager(context);
+            instance = new AuthManager();
         }
 
         return instance;
@@ -88,7 +84,7 @@ public class AuthManager {
 			public void done(ParseException e) {
 				if (e == null) {
 				  parseUser = user;
-				  GameBoxService api = new GameBoxService(context);
+				  GameBoxService api = new GameBoxService();
 				  try{
 					  api.CreateInicialCategoriesSync();
 					  callback.done(user.getEmail(), null);
