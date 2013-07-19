@@ -78,7 +78,8 @@ public class MainActivity  extends FragmentActivity implements
     
     public void verifyNetworkConnection(){
     	if(!UIUtils.isOnline(this)){
-    		Toast toast = Toast.makeText(this, "This app needs internet connection", Toast.LENGTH_LONG);
+    		String msgInternetConnection = this.getResources().getString(R.string.msg_internet_connection_required);
+    		Toast toast = Toast.makeText(this, msgInternetConnection, Toast.LENGTH_LONG);
     		toast.show();
     	}
     }
@@ -113,13 +114,17 @@ public class MainActivity  extends FragmentActivity implements
     private void initialiseTabHost(Bundle args) {
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
+        
+        String tabGamesName = this.getResources().getString(R.string.tab_title_games);
+        String tabLentName = this.getResources().getString(R.string.tab_title_lent);
+        
         TabInfo tabInfo = null;
         MainActivity.AddTab(this, this.mTabHost,
-                this.mTabHost.newTabSpec("TabGames").setIndicator("Games"),
+                this.mTabHost.newTabSpec("TabGames").setIndicator(tabGamesName),
                 (tabInfo = new TabInfo("TabGames", GamesFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         MainActivity.AddTab(this, this.mTabHost,
-                this.mTabHost.newTabSpec("TabLent").setIndicator("Lent"),
+                this.mTabHost.newTabSpec("TabLent").setIndicator(tabLentName),
                 (tabInfo = new TabInfo("TabLent", LentFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         mTabHost.setOnTabChangedListener(this);

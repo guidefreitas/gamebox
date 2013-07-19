@@ -22,6 +22,15 @@
     <string name="dialog_title_pick_image_source">Image Source</string>
     <string name="dialog_delete_category_title">Delete Category</string>
     <string name="empty_category_message">This category has no game.</string>
+    <string name="msg_select_category">Select a category</string>
+    <string name="msg_game_name">Inform a game name</string>
+    <string name="msg_game_id_not_informed">Game id not informed</string>
+    <string name="msg_game_deleted">Game deleted!</string>
+    <string name="msg_internet_connection_required">This app needs internet connection to work.</string>
+    <string name="msg_email_not_informed">Email not informed</string>
+    <string name="msg_password_not_informed">Password not informed</string>
+    <string name="msg_password_confirmation_not_informed">Password confirmation not informed</string>
+    <string name="msg_password_and_confirmation_not_equal">Password and password confirmation should be equal</string>
     
     <string name="delete">Delete</string>
     <string name="label_lent_to">Lent to</string>

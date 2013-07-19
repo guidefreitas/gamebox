@@ -37,9 +37,7 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
         View view = inflater.inflate(R.layout.activity_games, container, false);
         this.spinner = (Spinner) view.findViewById(R.id.spinner);
         CategoriesAdapter categoriesAdapter = DataSources.getCategoriesAdapter(getActivity(), false);
-        spinner.setPrompt("All Categories");
         spinner.setAdapter(categoriesAdapter);
-        spinner.setSelection(-1);
         spinner.setOnItemSelectedListener(this);
         
         updateData(true);

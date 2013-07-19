@@ -15,6 +15,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
@@ -62,7 +63,9 @@ public class GameDetailActivity extends FragmentActivity {
 			String gameId = extras.getString("GAME_ID");
 			initGameScreen(gameId);
 		} else {
-			showErroMessage("Game Id not informed");
+			
+			String msg = this.getResources().getString(R.string.msg_game_id_not_informed);
+			showErroMessage(msg);
 		}
 	}
 
@@ -162,7 +165,8 @@ public class GameDetailActivity extends FragmentActivity {
 			@Override
 			public void done(Game object, GameboxException e) {
 				if(e == null){
-					showErroMessage("Game deleted!");
+					String msg = Resources.getSystem().getString(R.string.msg_game_deleted);
+					showErroMessage(msg);
 					onBackPressed();
 				}else{
 					showErroMessage(e.getMessage());

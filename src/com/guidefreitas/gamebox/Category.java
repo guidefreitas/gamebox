@@ -8,7 +8,8 @@ import com.parse.ParseObject;
  */
 @ParseClassName("category")
 public class Category extends ParseObject {
-	
+	public final static String FIELD_OBJECT_ID="objectId";
+	public final static String FIELD_NAME = "name";
 	public Category(){
 		
 	}
@@ -19,10 +20,10 @@ public class Category extends ParseObject {
 
 	
     public String getName() {
-        return getString("name");
+        return getString(Category.FIELD_NAME);
     }
 
     public void setName(String value) {
-        put("name", value);
+        put(Category.FIELD_NAME, value);
     }
 }

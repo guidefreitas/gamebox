@@ -295,12 +295,14 @@ public class EditGameActivity extends FragmentActivity implements
 	private void Save() throws Exception {
 
 		if (spGameCategory.getSelectedItem() == null) {
-			showErrorMessage("Select a category");
+			String msg = this.getResources().getString(R.string.msg_select_category);
+			showErrorMessage(msg);
 			return;
 		}
 
 		if (etGameName.getText().toString().isEmpty()) {
-			showErrorMessage("Insert a game name");
+			String msg = this.getResources().getString(R.string.msg_game_name);
+			showErrorMessage(msg);
 			return;
 		}
 

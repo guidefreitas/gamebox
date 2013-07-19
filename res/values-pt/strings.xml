@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GameBox</string>
+    <string name="hello_world">Olá Mundo!</string>
+    <string name="title_category">Categoria</string>
+    <string name="hint_category_name">Nome</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Senha</string>
+    <string name="hint_confirm_password">Confirmação de Senha</string>
+    <string name="hint_lent_person_name">Nome do amigo</string>
+    <string name="hint_buy_date">Data de compra</string>
+    <string name="hint_price">Preço</string>
+    <string name="hint_category">Categoria</string>
+    <string name="hint_game_name">Jogo</string>
+    <string name="hint_login_email">Email</string>
+    <string name="hint_login_password">Senha</string>
+    <string name="hint_login_confirm_password">Confirmação de Senha</string>
+    <string name="description_game_cover_image">Imagem da capa do jogo</string>
+    <string name="dialog_delete_game_message">Tem certeza que quer apagar o jogo?</string>
+    <string name="dialog_delete_game_title">Apagar Jogo</string>
+    <string name="dialog_title_pick_image_source">Imagem</string>
+    <string name="dialog_delete_category_title">Apagar categoria</string>
+    <string name="empty_category_message">Esta categoria não possui jogos.</string>
+    <string name="msg_select_category">Selecione uma categoria</string>
+    <string name="msg_game_name">Informe o nome do jogo</string>
+    <string name="msg_game_id_not_informed">Id do jogo não informado</string>
+    <string name="msg_game_deleted">Jogo apagado com sucesso!</string>
+    <string name="msg_internet_connection_required">Este aplicativo precisa de conexão com a internet para funcionar.</string>
+    <string name="msg_email_not_informed">Email não informado</string>
+    <string name="msg_password_not_informed">Senha não informada</string>
+    <string name="msg_password_confirmation_not_informed">Confirmação de senha não informada</string>
+    <string name="msg_password_and_confirmation_not_equal">A senha e a confirmação de senha devem ser iguais.</string>
+    
+    <string name="delete">Apagar</string>
+    <string name="label_lent_to">Emprestado para</string>
+    <string name="loading">Carregando&#8230;</string>
+    <string name="lent">Emprestado</string>
+    <string name="login">Login</string>
+    <string name="create_account">Criar conta</string>
+    <string name="save">Salvar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="tab_title_games">Jogos</string>
+    <string name="tab_title_categories">Categorias</string>
+    <string name="tab_title_lent">Emprestados</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_refresh">Atualizar</string>
+    <string name="action_add_game">Adicionar jogo</string>
+    <string name="action_add_category">Adicionar categoria</string>
+    <string name="action_remove_category">Remover categoria</string>
+    <string name="action_settings">Configurações</string>
+    <string name="action_edit_game">Editar</string>
+    <string name="action_save_game">Salvar</string>
+    <string name="action_delete_game">Apagar</string>
+    
+    <string name="title_activity_game_detail">Jogo</string>
+    <string name="title_activity_login">Login</string>
+	<string name="title_activity_edit_game">Jogo</string>
+	<string name="title_activity_signup">Cadastre-se</string>
+	
+	<string name="dialog_cover_image_camera">Câmera</string>
+	<string name="dialog_cover_image_galery">Galeria de Imagens</string>
+	<string name="dialog_cover_image_search">Buscar imagem de capa no Google</string>
+	
+	<string name="unknown_room">Unknown room</string>
+	<string name="codelab_room">Codelab room</string>
+	<string name="session_subtitle">session subtitle</string>
+</resources>

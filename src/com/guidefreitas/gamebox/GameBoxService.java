@@ -1,5 +1,6 @@
 package com.guidefreitas.gamebox;
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.guidefreitas.gamebox.callbacks.CompleteCallback;
 import com.guidefreitas.gamebox.callbacks.FindException;
@@ -51,7 +52,8 @@ public class GameBoxService {
 			});
     		
     	}else{
-    		FindException ex = new FindException("Game id not informed");
+    		String msg = Resources.getSystem().getString(R.string.msg_game_id_not_informed);
+    		FindException ex = new FindException(msg);
     		callback.done(null, ex);
     	}
     }
@@ -65,7 +67,7 @@ public class GameBoxService {
     	
     	for(String cat : categories){
     		ParseObject categoryParse = ParseObject.create("category");
-            categoryParse.put("name", cat);
+            categoryParse.put(Category.FIELD_NAME, cat);
             categoryParse.save();
     	}
     }
@@ -126,7 +128,7 @@ public class GameBoxService {
     
     public static void CreateCategory(final Category category, final CompleteCallback<Category> callback){
         Category categoryDb = ParseObject.create(Category.class);
-        categoryDb.put("name", category.getName());
+        categoryDb.put(Category.FIELD_NAME, category.getName());
         categoryDb.saveInBackground(new SaveCallback() {
 			
 			@Override
@@ -151,7 +153,7 @@ public class GameBoxService {
         query.include("category");
         query.clearCachedResult();
         query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.orderByAscending("name");
+        query.orderByAscending(Category.FIELD_NAME);
         query.findInBackground(callback);
     }
     

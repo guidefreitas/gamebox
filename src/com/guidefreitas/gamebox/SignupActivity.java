@@ -48,22 +48,22 @@ public class SignupActivity extends Activity {
 		String confirmPassword  = etConfirmPassword.getText().toString();
 		
 		if(email.isEmpty()){
-			showErrorMessage("Email not informed");
+			showErrorMessage(R.string.msg_email_not_informed);
 			return;
 		}
 		
 		if(password.isEmpty()){
-			showErrorMessage("Password not informed");
+			showErrorMessage(R.string.msg_password_not_informed);
 			return;
 		}
 		
 		if(confirmPassword.isEmpty()){
-			showErrorMessage("Password confirmation not informed");
+			showErrorMessage(R.string.msg_password_confirmation_not_informed);
 			return;
 		}
 		
 		if(!password.equals(confirmPassword)){
-			showErrorMessage("Password and password confirmation should be equal");
+			showErrorMessage(R.string.msg_password_and_confirmation_not_equal);
 			return;
 		}
 		
@@ -85,6 +85,11 @@ public class SignupActivity extends Activity {
 			}
 
 		});
+	}
+	
+	private void showErrorMessage(int resourceId){
+		String msg = this.getResources().getString(resourceId);
+		showErrorMessage(msg);
 	}
 	
 	private void showErrorMessage(String message){
