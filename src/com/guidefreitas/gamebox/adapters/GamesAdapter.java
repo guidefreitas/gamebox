@@ -71,8 +71,11 @@ public class GamesAdapter extends ParseQueryAdapter<Game>{
 	  }
 	  
 	  ParseFile coverImageFile = game.getParseFile(Game.FIELD_COVER_IMAGE);
-	  mImageFetcher.loadImage(coverImageFile.getUrl(), viewHolder.imageView, this.loadingCoverImage);
-	  
+	  if(coverImageFile != null){
+		  mImageFetcher.loadImage(coverImageFile.getUrl(), viewHolder.imageView, this.loadingCoverImage);
+	  }else{
+		  viewHolder.imageView.setImageBitmap(this.loadingCoverImage);
+	  }
 	  viewHolder.titleView.setText(game.getString(Game.FIELD_NAME));
 	  
 	  if(game.getBoolean(Game.FIELD_LENT)){

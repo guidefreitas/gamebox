@@ -260,8 +260,11 @@ public class EditGameActivity extends FragmentActivity implements
 					}
 					
 					ParseFile coverImageFile = game.getParseFile(Game.FIELD_COVER_IMAGE);
-					mImageFetcher.loadImage(coverImageFile.getUrl(), coverImageView, emptyCoverImage);
-					
+					if(coverImageFile != null){
+						mImageFetcher.loadImage(coverImageFile.getUrl(), coverImageView, emptyCoverImage);
+					}else{
+						coverImageView.setImageBitmap(emptyCoverImage);
+					}
 					Category category = (Category) game.getParseObject(Game.FIELD_CATEGORY);
 					CategoriesAdapter adapter = (CategoriesAdapter) spGameCategory.getAdapter();
 					int position = adapter.indexOf(category);

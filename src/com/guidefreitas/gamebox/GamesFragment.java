@@ -26,12 +26,6 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
 		}
     }
     
-    @Override
-    public void onResume(){
-    	super.onResume();
-    	updateData(true);
-    }
-   
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

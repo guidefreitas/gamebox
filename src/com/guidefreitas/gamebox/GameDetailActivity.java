@@ -84,8 +84,11 @@ public class GameDetailActivity extends FragmentActivity {
 					
 					
 					ParseFile coverImageFile = game.getParseFile(Game.FIELD_COVER_IMAGE);
-					mImageFetcher.loadImage(coverImageFile.getUrl(), ivCoverImage, emptyCoverImage);
-				
+					if(coverImageFile != null){
+						mImageFetcher.loadImage(coverImageFile.getUrl(), ivCoverImage, emptyCoverImage);
+					}else{
+						ivCoverImage.setImageBitmap(emptyCoverImage);
+					}
 
 					progressBar.setVisibility(View.GONE);
 					detailPanel.setVisibility(View.VISIBLE);
