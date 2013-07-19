@@ -7,36 +7,38 @@ import com.guidefreitas.gamebox.callbacks.CompleteCallback;
 import com.guidefreitas.gamebox.callbacks.FindException;
 import com.guidefreitas.gamebox.callbacks.FindOneCallback;
 import com.guidefreitas.gamebox.callbacks.GameboxException;
-import com.parse.DeleteCallback;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
+import com.guidefreitas.gamebox.util.UIUtils;
 import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class GameDetailActivity extends Activity {
+public class GameDetailActivity extends FragmentActivity {
 
 	private ProgressBar progressBar = null;
 	private LinearLayout detailPanel = null;
-	private ParseImageView ivCoverImage = null;
+	private ImageView ivCoverImage = null;
 	private TextView tvGameName = null;
 	private TextView tvGamePrice = null;
 	private TextView tvGameBuyDate = null;
 
+	private ImageFetcher mImageFetcher;
+	private Bitmap emptyCoverImage;
+	
 	private Game game;
 
 	@Override
@@ -46,11 +48,14 @@ public class GameDetailActivity extends Activity {
 
 		this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
 		this.detailPanel = (LinearLayout) this.findViewById(R.id.detailPanel);
-		this.ivCoverImage = (ParseImageView) this.findViewById(R.id.coverImage);
+		this.ivCoverImage = (ImageView) this.findViewById(R.id.coverImage);
 		this.tvGameName = (TextView) this.findViewById(R.id.gameName);
 		this.tvGamePrice = (TextView) this.findViewById(R.id.gamePrice);
 		this.tvGameBuyDate = (TextView) this.findViewById(R.id.gameBuyDate);
-
+		
+		this.mImageFetcher = UIUtils.getImageFetcher(this);
+		emptyCoverImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.blank_box);
+		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			String gameId = extras.getString("GAME_ID");
@@ -75,27 +80,11 @@ public class GameDetailActivity extends Activity {
 					tvGamePrice.setText(priceString);
 					SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
 					tvGameBuyDate.setText(dt1.format(game.getBuyDate()));
-
-					ParseFile coverImageFile = game
-							.getParseFile(Game.FIELD_COVER_IMAGE);
-					final String coverImageId = coverImageFile.getUrl();
-					Bitmap cachedImage = ImageCacheManager.getInstance()
-							.getImage(coverImageId);
-					if (cachedImage == null) {
-						ivCoverImage.setPlaceholder(getResources().getDrawable(
-								R.drawable.blank_box));
-						ivCoverImage.setParseFile(game.getCoverImage());
-						ivCoverImage.loadInBackground(new GetDataCallback() {
-
-							@Override
-							public void done(byte[] data, ParseException arg1) {
-								ImageCacheManager.getInstance().addImage(
-										coverImageId, data);
-							}
-						});
-					} else {
-						ivCoverImage.setImageBitmap(cachedImage);
-					}
+					
+					
+					ParseFile coverImageFile = game.getParseFile(Game.FIELD_COVER_IMAGE);
+					mImageFetcher.loadImage(coverImageFile.getUrl(), ivCoverImage, emptyCoverImage);
+				
 
 					progressBar.setVisibility(View.GONE);
 					detailPanel.setVisibility(View.VISIBLE);

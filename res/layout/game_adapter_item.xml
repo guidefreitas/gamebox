@@ -9,7 +9,7 @@
 	android:paddingTop="5sp"
 	android:paddingLeft="5sp">
  
-	<com.parse.ParseImageView 
+	<ImageView 
 		android:id="@+id/coverImage" 
 		android:layout_width="@dimen/games_list_cover_image_width"
 		android:layout_height="@dimen/games_list_cover_image_height"

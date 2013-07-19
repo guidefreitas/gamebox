@@ -3,14 +3,14 @@ package com.guidefreitas.gamebox;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.guidefreitas.gamebox.adapters.CategoriesAdapter;
 import com.guidefreitas.gamebox.callbacks.FindException;
 import com.guidefreitas.gamebox.callbacks.FindOneCallback;
-import com.parse.GetDataCallback;
+import com.guidefreitas.gamebox.util.UIUtils;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import android.net.Uri;
@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +37,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -50,13 +50,16 @@ public class EditGameActivity extends FragmentActivity implements
 	private static final int SELECT_CAMERA_PHOTO = 200;
 
 	private ScrollView scrollView;
-	private ParseImageView coverImageView;
+	private ImageView coverImageView;
 	private EditText etGameName;
 	private TextView etGameBuyDate;
 	private EditText etGamePrice;
 	private Spinner spGameCategory;
 	private EditText etLentPersonName;
 	private CheckBox cbLent;
+	
+	private ImageFetcher mImageFetcher;
+	private Bitmap emptyCoverImage;
 
 	private Game game;
 
@@ -71,7 +74,7 @@ public class EditGameActivity extends FragmentActivity implements
 		}
 
 		scrollView = (ScrollView) findViewById(R.id.scrollView);
-		coverImageView = (ParseImageView) findViewById(R.id.coverImage);
+		coverImageView = (ImageView) findViewById(R.id.coverImage);
 		etGameName = (EditText) findViewById(R.id.etGameName);
 		etGameBuyDate = (TextView) findViewById(R.id.etGameBuyDate);
 		etGamePrice = (EditText) findViewById(R.id.etGamePrice);
@@ -79,9 +82,8 @@ public class EditGameActivity extends FragmentActivity implements
 		spGameCategory = (Spinner) findViewById(R.id.spGameCategory);
 		cbLent = (CheckBox) findViewById(R.id.cbLent);
 
-		Drawable empty_cover = this.getResources().getDrawable(
-				R.drawable.blank_box);
-		coverImageView.setPlaceholder(empty_cover);
+		this.mImageFetcher = UIUtils.getImageFetcher(this);
+		emptyCoverImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.blank_box);
 
 		CategoriesAdapter categoriesAdapter = DataSources.getCategoriesAdapter(this, false);
 		spGameCategory.setAdapter(categoriesAdapter);
@@ -93,6 +95,10 @@ public class EditGameActivity extends FragmentActivity implements
 			initGameScreen(gameId);
 		} else {
 			game = new Game();
+			game.setBuyDate(new Date());
+			SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
+			etGameBuyDate.setText(dt1.format(game.getBuyDate()));
+				
 		}
 
 		etGameBuyDate.setOnClickListener(new OnClickListener() {
@@ -244,30 +250,17 @@ public class EditGameActivity extends FragmentActivity implements
 					game = gameDb;
 					etGameName.setText(game.getName());
 					etGamePrice.setText(game.getBuyValue().toString());
+					Date buyDate = game.getBuyDate();
 					SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
-					etGameBuyDate.setText(dt1.format(game.getBuyDate()));
-					
-					ParseFile coverImageFile = game
-							.getParseFile(Game.FIELD_COVER_IMAGE);
-					final String coverImageId = coverImageFile.getUrl();
-					Bitmap cachedImage = ImageCacheManager.getInstance()
-							.getImage(coverImageId);
-					if (cachedImage == null) {
-						coverImageView.setPlaceholder(getResources()
-								.getDrawable(R.drawable.blank_box));
-						coverImageView.setParseFile(game.getCoverImage());
-						coverImageView.loadInBackground(new GetDataCallback() {
-							@Override
-							public void done(byte[] data, ParseException arg1) {
-								ImageCacheManager.getInstance().addImage(
-										coverImageId, data);
-							}
-						});
+					if(buyDate != null){
+						etGameBuyDate.setText(dt1.format(game.getBuyDate()));
 					}else{
-						coverImageView.setImageBitmap(cachedImage);
+						etGameBuyDate.setText(dt1.format(new Date()));
 					}
 					
-
+					ParseFile coverImageFile = game.getParseFile(Game.FIELD_COVER_IMAGE);
+					mImageFetcher.loadImage(coverImageFile.getUrl(), coverImageView, emptyCoverImage);
+					
 					Category category = (Category) game.getParseObject(Game.FIELD_CATEGORY);
 					CategoriesAdapter adapter = (CategoriesAdapter) spGameCategory.getAdapter();
 					int position = adapter.indexOf(category);
@@ -315,7 +308,7 @@ public class EditGameActivity extends FragmentActivity implements
 		if(!gamePrice.isEmpty()){
 			game.setBuyValue(Double.parseDouble(gamePrice));
 		}else{
-			game.setBuyValue(null);
+			game.setBuyValue(Double.valueOf(0));
 		}
 		
 		String gameBuyDate = etGameBuyDate.getText().toString();

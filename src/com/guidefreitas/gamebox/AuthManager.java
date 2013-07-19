@@ -1,11 +1,7 @@
 package com.guidefreitas.gamebox;
 
-import android.content.Context;
-
 import com.guidefreitas.gamebox.callbacks.CompleteCallback;
 import com.guidefreitas.gamebox.callbacks.GameboxException;
-import com.guidefreitas.gamebox.callbacks.LoginCallback;
-import com.guidefreitas.gamebox.callbacks.LoginException;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -22,7 +18,7 @@ public class AuthManager {
     	
     }
 
-    public static AuthManager getInstance(Context context){
+    public static AuthManager getInstance(){
         if(instance == null){
             instance = new AuthManager();
         }
@@ -57,7 +53,7 @@ public class AuthManager {
 		ParseUser.logOut();
 	}
 
-	public void login(String email, String password, final LoginCallback callback) {
+	public void login(String email, String password, final CompleteCallback<String> callback) {
 		
 		ParseUser.logInInBackground(email, password, new LogInCallback() {
 		  public void done(ParseUser user, ParseException e) {
@@ -66,7 +62,7 @@ public class AuthManager {
 		    	callback.done(user.getEmail(), null);
 		    	
 		    } else {
-		      LoginException ex = new LoginException(e.getMessage());
+		      GameboxException ex = new GameboxException(e.getMessage());
 		      callback.done(null, ex);
 		    }
 		  }
@@ -84,9 +80,8 @@ public class AuthManager {
 			public void done(ParseException e) {
 				if (e == null) {
 				  parseUser = user;
-				  GameBoxService api = new GameBoxService();
 				  try{
-					  api.CreateInicialCategoriesSync();
+					  GameBoxService.CreateInicialCategoriesSync();
 					  callback.done(user.getEmail(), null);
 				  }catch(Exception ex2){
 					  GameboxException ex = new GameboxException(ex2.getMessage());

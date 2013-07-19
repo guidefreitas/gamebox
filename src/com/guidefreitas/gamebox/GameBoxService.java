@@ -21,11 +21,14 @@ import java.util.List;
  */
 public class GameBoxService {
 	
+	public static final String applicationId = "x2YnBUxAskUDXXDFj8o3tKUi6KuJ5He3tGAnJc8n";
+    public static final String clientId = "8gEzghntbxv34JyA1aKrIp0BUfjehyxiU8UQbUGu";
+
 	
     public static void InitializeParse(Context context){
     	ParseObject.registerSubclass(Category.class);
         ParseObject.registerSubclass(Game.class);
-        Parse.initialize(context, ParseManager.applicationId, ParseManager.clientId);
+        Parse.initialize(context, applicationId, clientId);
         ParseACL.setDefaultACL(new ParseACL(), true);
     }
 
@@ -72,11 +75,13 @@ public class GameBoxService {
 			
 			@Override
 			public void done(ParseException ex) {
-				if(ex == null){
-					callback.done(game, null);
-				}else{
-					GameboxException e = new GameboxException(ex.getMessage());
-					callback.done(null, e);
+				if(callback != null){
+					if(ex == null){
+						callback.done(game, null);
+					}else{
+						GameboxException e = new GameboxException(ex.getMessage());
+						callback.done(null, e);
+					}
 				}
 			}
 		});
@@ -87,12 +92,33 @@ public class GameBoxService {
 			
 			@Override
 			public void done(ParseException ex) {
-				if(ex == null){
-					ParseQuery.clearAllCachedResults();
-					callback.done(game, null);
-				}else{
-					GameboxException e = new GameboxException(ex.getMessage());
-					callback.done(null, e);
+				ParseQuery.clearAllCachedResults();
+				if(callback != null){
+					if(ex == null){
+						
+						callback.done(game, null);
+					}else{
+						GameboxException e = new GameboxException(ex.getMessage());
+						callback.done(null, e);
+					}
+				}
+			}
+		});
+    }
+    
+    public static void DeleteCategory(final Category category, final CompleteCallback<Category> callback){
+    	category.deleteInBackground(new DeleteCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				ParseQuery.clearAllCachedResults();
+				if(callback != null){
+					if(e == null){
+						callback.done(category, null);
+					}else{
+						GameboxException ex = new GameboxException(e.getMessage());
+						callback.done(null, ex);
+					}
 				}
 			}
 		});
@@ -105,10 +131,11 @@ public class GameBoxService {
 			
 			@Override
 			public void done(ParseException e) {
+				ParseQuery.clearAllCachedResults();
 				if(e == null){
 					//ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
 					//query.clearAllCachedResults();
-					ParseQuery.clearAllCachedResults();
+					
 					callback.done(category, null);
 				}else{
 					GameboxException ex = new GameboxException(e.getMessage());
@@ -126,5 +153,9 @@ public class GameBoxService {
         query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query.orderByAscending("name");
         query.findInBackground(callback);
+    }
+    
+    public static void clearCache(){
+    	ParseQuery.clearAllCachedResults();
     }
 }

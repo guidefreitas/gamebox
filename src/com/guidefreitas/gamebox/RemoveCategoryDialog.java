@@ -21,7 +21,7 @@ public class RemoveCategoryDialog extends DialogFragment {
 	               public void onClick(DialogInterface dialog, int id) {
 	            	   int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
 	            	   Category category = (Category) adapter.getItem(selectedPosition);
-	            	   category.deleteInBackground();
+	            	   GameBoxService.DeleteCategory(category, null);
 	               }
 	           });
 	    

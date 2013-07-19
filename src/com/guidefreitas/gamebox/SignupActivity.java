@@ -70,7 +70,7 @@ public class SignupActivity extends Activity {
 		
 		btCreateAccount.setEnabled(false);
 		btCreateAccount.setText(R.string.loading);
-		AuthManager.getInstance(this).createUser(email, password, new CompleteCallback<String>() {
+		AuthManager.getInstance().createUser(email, password, new CompleteCallback<String>() {
 			
 			@Override
 			public void done(String email, GameboxException e) {

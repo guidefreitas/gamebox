@@ -1,31 +1,40 @@
 package com.guidefreitas.gamebox.adapters;
 
 import com.guidefreitas.gamebox.Game;
+import com.guidefreitas.gamebox.ImageFetcher;
 import com.guidefreitas.gamebox.R;
-import com.parse.ParseImageView;
+import com.guidefreitas.gamebox.util.UIUtils;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class LentAdapter extends ParseQueryAdapter<Game>{
 	
-	private Context context;
+	private FragmentActivity context;
+	private ImageFetcher mImageFetcher;
+	private Bitmap emptyCoverImage;
 	
-	public LentAdapter(Context context){
+	public LentAdapter(FragmentActivity context){
 		super(context, new QueryFactory<Game>() {
 			@Override
 			public ParseQuery<Game> create() {
 				ParseQuery<Game> query = ParseQuery.getQuery(Game.class);
 		        query.orderByAscending("name");
-		        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ONLY);
+		        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
 		        query.whereEqualTo("lent", true);
 		        return query;
 			}
 		});
 		this.context = context;
+		this.mImageFetcher = UIUtils.getImageFetcher(context);
+		emptyCoverImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.blank_box);
 		
 	}
 	
@@ -36,11 +45,10 @@ public class LentAdapter extends ParseQueryAdapter<Game>{
 	    v = View.inflate(context, R.layout.game_adapter_item, null);
 	  }
 
-	  ParseImageView imageView = (ParseImageView) v.findViewById(R.id.coverImage);
-	  imageView.setParseFile(object.getParseFile("cover_image"));
-	  imageView.setPlaceholder(context.getResources().getDrawable(R.drawable.blank_box));
-	  imageView.loadInBackground();
-	  
+	  ImageView imageView = (ImageView) v.findViewById(R.id.coverImage);
+	  ParseFile coverImageFile = object.getParseFile(Game.FIELD_COVER_IMAGE);
+	  mImageFetcher.loadImage(coverImageFile.getUrl(), imageView, emptyCoverImage);
+
 	  TextView titleView = (TextView) v.findViewById(R.id.title);
 	  titleView.setText(object.getString("name"));
 	  

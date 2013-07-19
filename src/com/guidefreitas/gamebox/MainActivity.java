@@ -85,7 +85,7 @@ public class MainActivity  extends FragmentActivity implements
     @Override
     protected void onResume(){
     	super.onResume();
-    	if(!AuthManager.getInstance(this).isAuthenticated()){
+    	if(!AuthManager.getInstance().isAuthenticated()){
     		NavigateToLogin();
     	}
     }
@@ -184,13 +184,14 @@ public class MainActivity  extends FragmentActivity implements
     }
     
     private void Logout() {
-		AuthManager.getInstance(this).logout();
+		AuthManager.getInstance().logout();
 		Toast toast = Toast.makeText(this, "Logout", Toast.LENGTH_LONG);
     	toast.show();
 		NavigateToLogin();
 	}
 
 	public void updateData(){
+		 GameBoxService.clearCache();
     	 GamesFragment gamesFragment = (GamesFragment) ((ViewPagerAdapter) mPagerAdapter).getItem(0);
     	 LentFragment lentFragment = (LentFragment) ((ViewPagerAdapter) mPagerAdapter).getItem(1);
          gamesFragment.updateData(true);

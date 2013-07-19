@@ -1,7 +1,7 @@
 package com.guidefreitas.gamebox;
 
-import com.guidefreitas.gamebox.callbacks.LoginCallback;
-import com.guidefreitas.gamebox.callbacks.LoginException;
+import com.guidefreitas.gamebox.callbacks.CompleteCallback;
+import com.guidefreitas.gamebox.callbacks.GameboxException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -79,9 +79,9 @@ public class LoginActivity extends Activity{
 		 progress.setMessage(loading);
 		 progress.show();
 		 
-		 AuthManager.getInstance(this).login(email, password, new LoginCallback() {
+		 AuthManager.getInstance().login(email, password, new CompleteCallback<String>() {
 			@Override
-			public void done(String email, LoginException e) {
+			public void done(String email, GameboxException e) {
 				if(e == null){
 					NavigateToMain();
 				}else{

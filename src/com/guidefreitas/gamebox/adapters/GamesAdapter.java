@@ -2,27 +2,27 @@ package com.guidefreitas.gamebox.adapters;
 
 import com.guidefreitas.gamebox.Category;
 import com.guidefreitas.gamebox.Game;
-import com.guidefreitas.gamebox.ImageCacheManager;
+import com.guidefreitas.gamebox.ImageFetcher;
 import com.guidefreitas.gamebox.R;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
+import com.guidefreitas.gamebox.util.UIUtils;
 import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class GamesAdapter extends ParseQueryAdapter<Game>{
 	
-	private Context context;
-	private Drawable emptyCoverImage;
+	private FragmentActivity context;
+	private ImageFetcher mImageFetcher;
+	private Bitmap loadingCoverImage;
 	
-	public GamesAdapter(Context context, final String categoryId,final boolean forceRefresh){
+	public GamesAdapter(FragmentActivity context, final String categoryId,final boolean forceRefresh){
 		super(context, new QueryFactory<Game>() {
 			@Override
 			public ParseQuery<Game> create() {
@@ -42,13 +42,16 @@ public class GamesAdapter extends ParseQueryAdapter<Game>{
 		        return query;
 			}
 		});
+		
+		this.mImageFetcher = UIUtils.getImageFetcher(context);
+		this.loadingCoverImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.blank_box);
 		this.context = context;
-		emptyCoverImage = context.getResources().getDrawable(R.drawable.blank_box);
+		
 		
 	}
 	
 	static class ViewHolder {
-		ParseImageView imageView;
+		ImageView imageView;
 		TextView titleView;
 		TextView subtitleView;
 	}
@@ -60,7 +63,7 @@ public class GamesAdapter extends ParseQueryAdapter<Game>{
 	  if (v == null) {
 	    v = View.inflate(context, R.layout.game_adapter_item, null);
 	    viewHolder = new ViewHolder();
-	    viewHolder.imageView = (ParseImageView) v.findViewById(R.id.coverImage);
+	    viewHolder.imageView = (ImageView) v.findViewById(R.id.coverImage);
 	    viewHolder.titleView = (TextView) v.findViewById(R.id.title);
 	    viewHolder.subtitleView = (TextView) v.findViewById(R.id.subtitle);
 	  }else{
@@ -68,21 +71,7 @@ public class GamesAdapter extends ParseQueryAdapter<Game>{
 	  }
 	  
 	  ParseFile coverImageFile = game.getParseFile(Game.FIELD_COVER_IMAGE);
-	  final String coverImageId = coverImageFile.getUrl();
-	  Bitmap cachedImage = ImageCacheManager.getInstance().getImage(coverImageId);
-	  if(cachedImage == null){
-		  viewHolder.imageView.setParseFile(coverImageFile);
-		  viewHolder.imageView.setPlaceholder(emptyCoverImage);
-		  viewHolder.imageView.loadInBackground(new GetDataCallback() {
-			@Override
-			public void done(byte[] data, ParseException arg1) {
-				ImageCacheManager.getInstance().addImage(coverImageId, data);
-			}
-		  });
-	  }else{
-		  viewHolder.imageView.setImageBitmap(cachedImage);
-	  }
-	  
+	  mImageFetcher.loadImage(coverImageFile.getUrl(), viewHolder.imageView, this.loadingCoverImage);
 	  
 	  viewHolder.titleView.setText(game.getString(Game.FIELD_NAME));
 	  

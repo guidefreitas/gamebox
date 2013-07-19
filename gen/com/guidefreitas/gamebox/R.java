@@ -106,6 +106,7 @@ public final class R {
         public static final int action_settings=0x7f070025;
         public static final int app_name=0x7f070000;
         public static final int cancel=0x7f07001c;
+        public static final int codelab_room=0x7f070031;
         public static final int create_account=0x7f07001a;
         public static final int delete=0x7f070015;
         public static final int description_game_cover_image=0x7f07000f;
@@ -135,6 +136,7 @@ public final class R {
         public static final int loading=0x7f070017;
         public static final int login=0x7f070019;
         public static final int save=0x7f07001b;
+        public static final int session_subtitle=0x7f070032;
         public static final int tab_title_categories=0x7f07001e;
         public static final int tab_title_games=0x7f07001d;
         public static final int tab_title_lent=0x7f07001f;
@@ -143,6 +145,7 @@ public final class R {
         public static final int title_activity_login=0x7f07002a;
         public static final int title_activity_signup=0x7f07002c;
         public static final int title_category=0x7f070002;
+        public static final int unknown_room=0x7f070030;
     }
     public static final class style {
         /** 

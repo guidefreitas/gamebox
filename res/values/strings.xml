@@ -52,4 +52,8 @@
 	<string name="dialog_cover_image_camera">Camera</string>
 	<string name="dialog_cover_image_galery">Image Galery</string>
 	<string name="dialog_cover_image_search">Search Cover Image in Google</string>
+	
+	<string name="unknown_room">Unknown room</string>
+	<string name="codelab_room">Codelab room</string>
+	<string name="session_subtitle">session subtitle</string>
 </resources>
