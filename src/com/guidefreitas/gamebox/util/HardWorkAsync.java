@@ -1,4 +1,4 @@
-package com.guidefreitas.gamebox;
+package com.guidefreitas.gamebox.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;

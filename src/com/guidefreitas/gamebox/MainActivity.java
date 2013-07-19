@@ -14,6 +14,7 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.guidefreitas.gamebox.adapters.ViewPagerAdapter;
+import com.guidefreitas.gamebox.util.UIUtils;
 import com.parse.ParseAnalytics;
 
 import java.util.HashMap;
@@ -76,7 +77,7 @@ public class MainActivity  extends FragmentActivity implements
     }
     
     public void verifyNetworkConnection(){
-    	if(!Util.isOnline(this)){
+    	if(!UIUtils.isOnline(this)){
     		Toast toast = Toast.makeText(this, "This app needs internet connection", Toast.LENGTH_LONG);
     		toast.show();
     	}
@@ -85,6 +86,7 @@ public class MainActivity  extends FragmentActivity implements
     @Override
     protected void onResume(){
     	super.onResume();
+    	verifyNetworkConnection();
     	if(!AuthManager.getInstance().isAuthenticated()){
     		NavigateToLogin();
     	}
