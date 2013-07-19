@@ -1,8 +1,8 @@
 package com.guidefreitas.gamebox.adapters;
 
 import com.guidefreitas.gamebox.Game;
-import com.guidefreitas.gamebox.ImageFetcher;
 import com.guidefreitas.gamebox.R;
+import com.guidefreitas.gamebox.util.ImageFetcher;
 import com.guidefreitas.gamebox.util.UIUtils;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;

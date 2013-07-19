@@ -7,6 +7,7 @@ import com.guidefreitas.gamebox.callbacks.CompleteCallback;
 import com.guidefreitas.gamebox.callbacks.FindException;
 import com.guidefreitas.gamebox.callbacks.FindOneCallback;
 import com.guidefreitas.gamebox.callbacks.GameboxException;
+import com.guidefreitas.gamebox.util.ImageFetcher;
 import com.guidefreitas.gamebox.util.UIUtils;
 import com.parse.ParseFile;
 import android.os.Bundle;

@@ -1,7 +1,6 @@
 package com.guidefreitas.gamebox.util;
 
 
-import com.guidefreitas.gamebox.ImageFetcher;
 import com.guidefreitas.gamebox.R;
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;

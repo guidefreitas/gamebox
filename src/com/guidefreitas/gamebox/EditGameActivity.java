@@ -8,6 +8,7 @@ import java.util.Date;
 import com.guidefreitas.gamebox.adapters.CategoriesAdapter;
 import com.guidefreitas.gamebox.callbacks.FindException;
 import com.guidefreitas.gamebox.callbacks.FindOneCallback;
+import com.guidefreitas.gamebox.util.ImageFetcher;
 import com.guidefreitas.gamebox.util.UIUtils;
 import com.parse.ParseException;
 import com.parse.ParseFile;
