@@ -12,17 +12,17 @@ import com.parse.ParseObject;
 public class Game  extends ParseObject{
 
 
-	final static String FIELD_OBJECT_ID="objectId";
-	final static String FIELD_NAME = "name";
-	final static String FIELD_BUY_DATE = "buy_date";
-	final static String FIELD_LENT = "lent";
-	final static String FIELD_FRIEND_LENT = "friend_lent";
-	final static String FIELD_COVER_IMAGE = "cover_image";
-	final static String FIELD_BUY_VALUE = "buy_value";
-	final static String FIELD_CATEGORY = "category";
-	final static String FIELD_RATING = "rating";
-	final static String FIELD_CREATED_AT = "createdAt";
-	final static String FIELD_UPDATED_AT = "updatedAt";
+	public final static String FIELD_OBJECT_ID="objectId";
+	public final static String FIELD_NAME = "name";
+	public final static String FIELD_BUY_DATE = "buy_date";
+	public final static String FIELD_LENT = "lent";
+	public final static String FIELD_FRIEND_LENT = "friend_lent";
+	public final static String FIELD_COVER_IMAGE = "cover_image";
+	public final static String FIELD_BUY_VALUE = "buy_value";
+	public final static String FIELD_CATEGORY = "category";
+	public final static String FIELD_RATING = "rating";
+	public final static String FIELD_CREATED_AT = "createdAt";
+	public final static String FIELD_UPDATED_AT = "updatedAt";
 	
 	
 	public void setCategoryId(String categoryId){

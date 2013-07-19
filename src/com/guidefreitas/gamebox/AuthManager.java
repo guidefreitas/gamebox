@@ -2,8 +2,8 @@ package com.guidefreitas.gamebox;
 
 import android.content.Context;
 
-import com.guidefreitas.gamebox.callbacks.CreateUserCallback;
-import com.guidefreitas.gamebox.callbacks.CreateUserException;
+import com.guidefreitas.gamebox.callbacks.CompleteCallback;
+import com.guidefreitas.gamebox.callbacks.GameboxException;
 import com.guidefreitas.gamebox.callbacks.LoginCallback;
 import com.guidefreitas.gamebox.callbacks.LoginException;
 import com.parse.LogInCallback;
@@ -73,7 +73,7 @@ public class AuthManager {
 		});
 	}
 	
-	public void createUser(final String email, final String password, final CreateUserCallback callback){
+	public void createUser(final String email, final String password, final CompleteCallback<String> callback){
 		final ParseUser user = new ParseUser();
 		user.setUsername(email);
 		user.setPassword(password);
@@ -89,11 +89,11 @@ public class AuthManager {
 					  api.CreateInicialCategoriesSync();
 					  callback.done(user.getEmail(), null);
 				  }catch(Exception ex2){
-					  CreateUserException ex = new CreateUserException(ex2.getMessage());
+					  GameboxException ex = new GameboxException(ex2.getMessage());
 					  callback.done(null, ex);
 				  }
 			    } else {
-			      CreateUserException ex = new CreateUserException(e.getMessage());
+			    	GameboxException ex = new GameboxException(e.getMessage());
 			      callback.done(null, ex);
 			    }
 			}

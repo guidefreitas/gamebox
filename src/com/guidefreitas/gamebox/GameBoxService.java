@@ -1,8 +1,12 @@
 package com.guidefreitas.gamebox;
 import android.content.Context;
 
-import com.guidefreitas.gamebox.callbacks.CreateCategoryCallback;
-import com.guidefreitas.gamebox.callbacks.CreateCategoryException;
+import com.guidefreitas.gamebox.callbacks.CompleteCallback;
+import com.guidefreitas.gamebox.callbacks.FindException;
+import com.guidefreitas.gamebox.callbacks.FindOneCallback;
+import com.guidefreitas.gamebox.callbacks.GameboxException;
+import com.parse.DeleteCallback;
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -16,8 +20,8 @@ import java.util.List;
  * Created by guilherme on 7/11/13.
  */
 public class GameBoxService {
-
-    
+	
+	
     public static void InitializeParse(Context context){
     	ParseObject.registerSubclass(Category.class);
         ParseObject.registerSubclass(Game.class);
@@ -25,7 +29,30 @@ public class GameBoxService {
         ParseACL.setDefaultACL(new ParseACL(), true);
     }
 
-    public void CreateInicialCategoriesSync() throws Exception{
+    public static void getGameById(String gameId, final FindOneCallback<Game> callback){
+    	if (gameId != null && !gameId.isEmpty()) {
+    		ParseQuery<Game> query = ParseQuery.getQuery(Game.class);
+			query.whereEqualTo(Game.FIELD_OBJECT_ID, gameId);
+			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+			query.getFirstInBackground(new GetCallback<Game>() {
+
+				@Override
+				public void done(Game game, ParseException e) {
+					if (e == null) {
+						callback.done(game, null);
+					}else{
+						FindException ex = new FindException(e.getMessage());
+						callback.done(null, ex);
+					}
+				}
+			});
+    		
+    	}else{
+    		FindException ex = new FindException("Game id not informed");
+    		callback.done(null, ex);
+    	}
+    }
+    public static void CreateInicialCategoriesSync() throws Exception{
     	List<String> categories = new ArrayList<String>();
     	categories.add("First Person Shooter");
     	categories.add("Racing");
@@ -40,17 +67,51 @@ public class GameBoxService {
     	}
     }
     
-    public void CreateCategory(final Category category, final CreateCategoryCallback callback){
-        ParseObject categoryParse = ParseObject.create("category");
-        categoryParse.put("name", category.getName());
-        categoryParse.saveInBackground(new SaveCallback() {
+    public static void CreateGame(final Game game, final CompleteCallback<Game> callback){
+    	game.saveInBackground(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException ex) {
+				if(ex == null){
+					callback.done(game, null);
+				}else{
+					GameboxException e = new GameboxException(ex.getMessage());
+					callback.done(null, e);
+				}
+			}
+		});
+    }
+    
+    public static void DeleteGame(final Game game, final CompleteCallback<Game> callback){
+    	game.deleteInBackground(new DeleteCallback() {
+			
+			@Override
+			public void done(ParseException ex) {
+				if(ex == null){
+					ParseQuery.clearAllCachedResults();
+					callback.done(game, null);
+				}else{
+					GameboxException e = new GameboxException(ex.getMessage());
+					callback.done(null, e);
+				}
+			}
+		});
+    }
+    
+    public static void CreateCategory(final Category category, final CompleteCallback<Category> callback){
+        Category categoryDb = ParseObject.create(Category.class);
+        categoryDb.put("name", category.getName());
+        categoryDb.saveInBackground(new SaveCallback() {
 			
 			@Override
 			public void done(ParseException e) {
 				if(e == null){
+					//ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
+					//query.clearAllCachedResults();
+					ParseQuery.clearAllCachedResults();
 					callback.done(category, null);
 				}else{
-					CreateCategoryException ex = new CreateCategoryException(e.getMessage());
+					GameboxException ex = new GameboxException(e.getMessage());
 					callback.done(null, ex);
 				}
 			}
@@ -58,11 +119,11 @@ public class GameBoxService {
     }
    
 
-    public void getAllCategories (com.parse.FindCallback<Category> callback){
+    public static void getAllCategories (com.parse.FindCallback<Category> callback){
         ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
         query.include("category");
         query.clearCachedResult();
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query.orderByAscending("name");
         query.findInBackground(callback);
     }

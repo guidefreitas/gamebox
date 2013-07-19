@@ -8,19 +8,6 @@ import com.guidefreitas.gamebox.adapters.LentAdapter;
 
 public class DataSources {
 
-	//private static DataSources instance;
-	private DataSources(){
-
-	}
-	/*
-	public static DataSources getInstance(){
-		if(instance == null)
-			instance = new DataSources();
-		
-		return instance;
-	}
-	*/
-	
 	public static CategoriesAdapter getCategoriesAdapter(Context context, boolean forceRefresh){
 		CategoriesAdapter adapter = new  CategoriesAdapter(context, forceRefresh);
 		return adapter;

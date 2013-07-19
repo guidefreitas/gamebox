@@ -1,7 +1,7 @@
 package com.guidefreitas.gamebox;
 
-import com.guidefreitas.gamebox.callbacks.CreateUserCallback;
-import com.guidefreitas.gamebox.callbacks.CreateUserException;
+import com.guidefreitas.gamebox.callbacks.CompleteCallback;
+import com.guidefreitas.gamebox.callbacks.GameboxException;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -70,10 +70,10 @@ public class SignupActivity extends Activity {
 		
 		btCreateAccount.setEnabled(false);
 		btCreateAccount.setText(R.string.loading);
-		AuthManager.getInstance(this).createUser(email, password, new CreateUserCallback() {
+		AuthManager.getInstance(this).createUser(email, password, new CompleteCallback<String>() {
 			
 			@Override
-			public void done(String email, CreateUserException e) {
+			public void done(String email, GameboxException e) {
 				if(e == null){
 					NavigateToMain();
 				}else{
@@ -83,6 +83,7 @@ public class SignupActivity extends Activity {
 				btCreateAccount.setEnabled(true);
 				
 			}
+
 		});
 	}
 	

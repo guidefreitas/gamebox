@@ -1,6 +1,5 @@
 package com.guidefreitas.gamebox;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -9,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.guidefreitas.gamebox.adapters.CategoriesAdapter;
 import com.guidefreitas.gamebox.adapters.GamesAdapter;
 
@@ -32,7 +29,7 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
     @Override
     public void onResume(){
     	super.onResume();
-    	//updateData();
+    	updateData(true);
     }
    
     
@@ -46,13 +43,12 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
         View view = inflater.inflate(R.layout.activity_games, container, false);
         this.spinner = (Spinner) view.findViewById(R.id.spinner);
         CategoriesAdapter categoriesAdapter = DataSources.getCategoriesAdapter(getActivity(), false);
-        spinner.setAdapter(categoriesAdapter);
-        Drawable tst = getActivity().getResources().getDrawable(R.drawable.ic_trash);
-        categoriesAdapter.setPlaceholder(tst);
         spinner.setPrompt("All Categories");
+        spinner.setAdapter(categoriesAdapter);
+        spinner.setSelection(-1);
         spinner.setOnItemSelectedListener(this);
         
-        updateData(false);
+        updateData(true);
         return view;
     }
     
@@ -67,17 +63,10 @@ public class GamesFragment extends ListFragment implements AdapterView.OnItemSel
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
     	
-    	if(i > 0){
-    		CategoriesAdapter categoriesAdapter = (CategoriesAdapter) spinner.getAdapter();
-    		Category category = categoriesAdapter.getItem(i);
-    		GamesAdapter adapter = DataSources.getGamesAdapter(getActivity(), category.getObjectId(), false);
-    		this.setListAdapter(adapter);
-    		
-    	}else{
-    		GamesAdapter adapter = DataSources.getGamesAdapter(getActivity(), null, false);
-    		this.setListAdapter(adapter);
-    	}
-    	
+    	CategoriesAdapter categoriesAdapter = (CategoriesAdapter) spinner.getAdapter();
+		Category category = categoriesAdapter.getItem(i);
+		GamesAdapter adapter = DataSources.getGamesAdapter(getActivity(), category.getObjectId(), false);
+		this.setListAdapter(adapter);
     }
     
     @Override

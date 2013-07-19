@@ -1,6 +1,7 @@
 package com.guidefreitas.gamebox;
-import com.guidefreitas.gamebox.callbacks.CreateCategoryCallback;
-import com.guidefreitas.gamebox.callbacks.CreateCategoryException;
+
+import com.guidefreitas.gamebox.callbacks.CompleteCallback;
+import com.guidefreitas.gamebox.callbacks.GameboxException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -73,10 +74,10 @@ public class CategoryDialog extends DialogFragment {
 						Log.v("Category: ", categoryName);
 						Category category = new Category();
 						category.setName(categoryName);
-						gbApi.CreateCategory(category, new CreateCategoryCallback() {
+						gbApi.CreateCategory(category, new CompleteCallback<Category>() {
 							
 							@Override
-							public void done(Category category, CreateCategoryException e) {
+							public void done(Category category, GameboxException e) {
 								if(e == null){
 									mListener.onCategoryDialogSaveClick(CategoryDialog.this);
 								}else{

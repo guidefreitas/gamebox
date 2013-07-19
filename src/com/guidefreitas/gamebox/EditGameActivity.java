@@ -5,8 +5,11 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 
 import com.guidefreitas.gamebox.adapters.CategoriesAdapter;
-import com.parse.GetCallback;
+import com.guidefreitas.gamebox.callbacks.FindException;
+import com.guidefreitas.gamebox.callbacks.FindOneCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
@@ -233,50 +236,58 @@ public class EditGameActivity extends FragmentActivity implements
 		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.show();
 		
-		if (gameId != null && !gameId.isEmpty()) {
-			ParseQuery<Game> query = ParseQuery.getQuery(Game.class);
-			query.whereEqualTo(Game.FIELD_OBJECT_ID, gameId);
-			query.include(Game.FIELD_CATEGORY);
-			query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
-			query.getFirstInBackground(new GetCallback<Game>() {
-
-				@Override
-				public void done(Game gameDb, ParseException e) {
-					progressDialog.dismiss();
-					if (e == null) {
-						game = gameDb;
-						etGameName.setText(game.getName());
-						etGamePrice.setText(game.getBuyValue().toString());
-						SimpleDateFormat dt1 = new SimpleDateFormat(
-								"dd/MM/yyyy");
-						etGameBuyDate.setText(dt1.format(game.getBuyDate()));
+		GameBoxService.getGameById(gameId, new FindOneCallback<Game>() {
+			
+			@Override
+			public void done(Game gameDb, FindException e) {
+				if (e == null) {
+					game = gameDb;
+					etGameName.setText(game.getName());
+					etGamePrice.setText(game.getBuyValue().toString());
+					SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
+					etGameBuyDate.setText(dt1.format(game.getBuyDate()));
+					
+					ParseFile coverImageFile = game
+							.getParseFile(Game.FIELD_COVER_IMAGE);
+					final String coverImageId = coverImageFile.getUrl();
+					Bitmap cachedImage = ImageCacheManager.getInstance()
+							.getImage(coverImageId);
+					if (cachedImage == null) {
 						coverImageView.setPlaceholder(getResources()
 								.getDrawable(R.drawable.blank_box));
 						coverImageView.setParseFile(game.getCoverImage());
-						coverImageView.loadInBackground();
-
-						Category category = (Category) game.getParseObject(Game.FIELD_CATEGORY);
-						CategoriesAdapter adapter = (CategoriesAdapter) spGameCategory.getAdapter();
-						int position = adapter.indexOf(category);
-						if(category != null){
-							spGameCategory.setSelected(true);
-							spGameCategory.setSelection(position);
-						}
-						
-
-						if (game.isLent()) {
-							cbLent.setChecked(true);
-							etLentPersonName.setText(game.getFriendLent());
-						}
-					} else {
-						showMessage(e.getMessage());
+						coverImageView.loadInBackground(new GetDataCallback() {
+							@Override
+							public void done(byte[] data, ParseException arg1) {
+								ImageCacheManager.getInstance().addImage(
+										coverImageId, data);
+							}
+						});
+					}else{
+						coverImageView.setImageBitmap(cachedImage);
 					}
+					
+
+					Category category = (Category) game.getParseObject(Game.FIELD_CATEGORY);
+					CategoriesAdapter adapter = (CategoriesAdapter) spGameCategory.getAdapter();
+					int position = adapter.indexOf(category);
+					if(category != null){
+						spGameCategory.setSelected(true);
+						spGameCategory.setSelection(position);
+					}
+					
+					if (game.isLent()) {
+						cbLent.setChecked(true);
+						etLentPersonName.setText(game.getFriendLent());
+					}
+					
+				} else {
+					showMessage(e.getMessage());
 				}
-			});
-
-		}
-		
-
+				
+				progressDialog.dismiss();
+			}
+		});
 	}
 
 	private void showMessage(String message) {
@@ -286,8 +297,7 @@ public class EditGameActivity extends FragmentActivity implements
 
 	private void Save() throws Exception {
 
-		if (spGameCategory.getSelectedItem() == null
-				| spGameCategory.getSelectedItemPosition() == 0) {
+		if (spGameCategory.getSelectedItem() == null) {
 			showErrorMessage("Select a category");
 			return;
 		}
@@ -300,9 +310,21 @@ public class EditGameActivity extends FragmentActivity implements
 		game.setName(etGameName.getText().toString());
 		Category category = (Category) spGameCategory.getSelectedItem();
 		game.setCategory(category);
-		game.setBuyValue(Double.parseDouble(etGamePrice.getText().toString()));
-		SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
-		game.setBuyDate(dt1.parse(etGameBuyDate.getText().toString()));
+		
+		String gamePrice = etGamePrice.getText().toString();
+		if(!gamePrice.isEmpty()){
+			game.setBuyValue(Double.parseDouble(gamePrice));
+		}else{
+			game.setBuyValue(null);
+		}
+		
+		String gameBuyDate = etGameBuyDate.getText().toString();
+		if(!gameBuyDate.isEmpty()){
+			SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
+			game.setBuyDate(dt1.parse(etGameBuyDate.getText().toString()));
+		}else{
+			game.setBuyDate(null);
+		}
 
 		if (cbLent.isChecked()) {
 			game.setLent(true);
@@ -319,6 +341,7 @@ public class EditGameActivity extends FragmentActivity implements
 		game.saveInBackground(new SaveCallback() {
 			@Override
 			public void done(ParseException arg0) {
+				ParseQuery.clearAllCachedResults();
 				progress.dismiss();
 				showMessage("Game Saved!");
 				navigateToHome();

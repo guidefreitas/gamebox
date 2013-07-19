@@ -25,10 +25,11 @@ public class CategoriesAdapter extends ParseQueryAdapter<Category> {
 			public ParseQuery<Category> create() {
 				ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
 		        query.orderByAscending("name");
+		        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
 		        if(forceRefresh){
 		        	query.clearCachedResult();
 		        }
-		        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+		        
 		        return query;
 			}
 		});
